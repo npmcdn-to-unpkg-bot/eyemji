@@ -1,0 +1,24 @@
+{
+  "name": "eyemji",
+  "version": "1.0.0",
+  "description": "A rich image library in development!",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/loehnertz/eyemji.git"
+  },
+  "author": "Jakob Löhnertz",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/loehnertz/eyemji/issues"
+  },
+  "homepage": "https://github.com/loehnertz/eyemji#readme",
+  "devDependencies": {
+    "browser-sync": "^2.14.0",
+    "gulp": "^3.9.1",
+    "gulp-sass": "^2.3.2"
+  }
+}

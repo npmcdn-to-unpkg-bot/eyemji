@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>eyemji</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css">
+	<link rel="stylesheet" href="./src/css/main.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<script src="https://npmcdn.com/vue/dist/vue.js"></script>
+</head>
+
+<body>
+	<div id="header">
+		<button @click="selectAll">Alle selektieren</button>
+		<button @click="deselectAll">Alle deselektieren</button>
+		<button @click="deleteSelected">L&ouml;schen</button>
+		<br>
+		<br>
+		<input placeholder="Suchbegriff" v-model="searchQuery" @keyup="deselectAll">
+	</div>
+	<div id="wrapper">
+		<div id="img-area">
+			<p>Bilder passend zum Suchbegriff: {{ searchQuery }}</p>
+			<ul>
+				<li class="img-container" id="{{ image.id }}" v-for="image in images | filterBy searchQuery in 'id' 'tags'">
+					<img :src="image.url" alt="" @click="imgSelect">
+				</li>
+			</ul>
+			<p>Ausgw&auml;hlte Objekte: {{ selectedImages.length }}</p>
+		</div>
+		<div id="sidebar">
+			<p>Sidebar</p>
+		</div>
+	</div>
+
+	<script src="./src/js/main.js"></script>
+</body>
+
+</html>
