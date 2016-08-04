@@ -21,18 +21,19 @@ var vm = new Vue({
 	},
 
 	methods: {
-		onLoadVisibleImages: function() {
+		setVisibleImages: function() {
 			this.visibleImages = this.images.slice();
-			console.log(this.visibleImages);
 		},
 		
-		imgSelect: function(t) {
-			var cb = t.target;
+		imgSelect: function(sel) {
+			var cb = event.currentTarget.firstElementChild;
 			$(cb).toggleClass("img-selected");
+			console.log(sel);
+			var slctd = event.target;
 			if ($(cb).hasClass("img-selected")) {
-				this.selectedImages.push(cb);
+				this.selectedImages.push(slctd);
 			} else {
-				this.selectedImages.pop(cb);
+				this.selectedImages.pop(slctd);
 			}
 		},
 
@@ -53,13 +54,18 @@ var vm = new Vue({
 			for (var image of this.selectedImages) {
 				this.images.pop(image);
 			}
+			this.deselectAll();
+		},
+		
+		onVMLoad: function() {
+			this.setVisibleImages();
 		}
 	}
 })
 
-vm.onLoadVisibleImages();
+vm.onVMLoad();
 
-Vue.transition('bounce', {
-	enterClass: 'bounceInLeft',
-	leaveClass: 'bounceOutRight'
+Vue.transition('fade', {
+	enterClass: 'fadeInUp',
+	leaveClass: 'fadeOutDown'
 })

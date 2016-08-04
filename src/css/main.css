@@ -8,26 +8,27 @@ p {
 
 #header {
   position: fixed;
-  z-index: 99;
-  width: 100vw;
+  z-index: 98;
+  width: 75vw;
   height: 5rem;
   background-color: firebrick;
 }
 
-#wrapper {
-  display: flex;
-  padding-top: 5rem;
-}
-
 #img-area {
-  padding: .5rem;
   background-color: #333;
-  flex-basis: 75%;
+  width: 75vw;
+  padding-top: 5rem;
+  min-height: 200vh;
 }
 
 #sidebar {
-  background-color: limegreen;
-  flex-basis: 25%;
+  position: fixed;
+  z-index: 99;
+  top: 0;
+  right: 0;
+  width: 25vw;
+  height: 100%;
+  background-color: firebrick;
 }
 
 #img-area ul {
@@ -52,4 +53,9 @@ p {
 
 .img-selected {
   border-color: dodgerblue !important;
+}
+
+.item-move {
+  /* applied to the element when moving */
+  transition: transform .5s cubic-bezier(.55, 0, .1, 1);
 }
