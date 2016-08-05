@@ -30,12 +30,12 @@
 		</div>
 		<div id="img-area">
 			<p>Gefunden: {{ visibleImages.length }}</p>
+			<p>Ausgewählte Objekte: {{ selectedImages.length }}</p>
 			<ul>
 				<li class="img-container" id="{{ image.uid }}" @click="imgSelect" v-for="image in images | filterBy searchQuery in 'uid' 'tags'">
 					<img :src="image.url" alt="">
 				</li>
 			</ul>
-			<p>Ausgewählte Objekte: {{ selectedImages.length }}</p>
 		</div>
 		<div id="sidebar">
 			<h3> Sidebar</h3>
