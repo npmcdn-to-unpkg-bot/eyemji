@@ -3,37 +3,40 @@ var vm = new Vue({
 
 	data: {
 		images: [{
-			id: '1',
+			uid: '1',
 			url: './img/unsplash_1.jpg',
-			tags: ['rose','blume']
+			tags: ['rose', 'blume']
 		}, {
-			id: '2',
+			uid: '2',
 			url: './img/unsplash_2.jpg',
-			tags: ['vogelperspektive','landschaft']
+			tags: ['vogelperspektive', 'landschaft']
 		}, {
-			id: '3',
+			uid: '3',
 			url: './img/unsplash_3.jpg',
-			tags: ['outdoor','lagerfeuer']
+			tags: ['outdoor', 'lagerfeuer']
 		}],
 		searchQuery: '',
-		visibleImages: [],
-		selectedImages: []
+		selectedImages: [],
+		visibleImages: []
 	},
 
 	methods: {
 		setVisibleImages: function() {
-			this.visibleImages = this.images.slice();
+			var visible = document.getElementsByClassName("img-container");
+			this.visibleImages.splice(0, this.visibleImages.length);
+			Array.prototype.forEach.call(visible, function(e) {
+				vm.visibleImages.push(e.id);
+			});
 		},
-		
-		imgSelect: function(sel) {
-			var cb = event.currentTarget.firstElementChild;
-			$(cb).toggleClass("img-selected");
-			console.log(sel);
-			var slctd = event.target;
-			if ($(cb).hasClass("img-selected")) {
-				this.selectedImages.push(slctd);
+
+		imgSelect: function() {
+			var selected = event.currentTarget;
+			$(selected.firstElementChild).toggleClass("img-selected");
+			if ($(selected.firstElementChild).hasClass("img-selected")) {
+				this.selectedImages.push(selected.id);
 			} else {
-				this.selectedImages.pop(slctd);
+				var index = this.selectedImages.indexOf(selected.id);
+				this.selectedImages.splice(index, 1);
 			}
 		},
 
@@ -57,15 +60,17 @@ var vm = new Vue({
 			this.deselectAll();
 		},
 		
-		onVMLoad: function() {
+		reRenderList: function() {
+			this.deselectAll();
 			this.setVisibleImages();
+		},
+		
+		onVMLoad: function() {
+			this.visibleImages = this.images.map(function(a) {
+				return a.uid;
+			});
 		}
 	}
 })
 
 vm.onVMLoad();
-
-Vue.transition('fade', {
-	enterClass: 'fadeInUp',
-	leaveClass: 'fadeOutDown'
-})

@@ -3,7 +3,7 @@ A rich image library in development
 ___
 
 **Roadmap:**
-+ _0.1.0_:  Basic styling as well as tagging, categorizing and sorting functionality  <- **UPCOMING**
++ _0.1.0_:  Basic styling as well as tagging, categorizing and sorting functionality  <- **CURRENT**
 + _0.2.0_:  Display images with lazy and infinite loading as well as a lightbox feature
 + _0.3.0_:  Basic upload functionality with Dropzone.JS and inserting into the Database
 + _0.4.0_:  Option to upload the same image in multiple formats as well as tagging and categories while uploading
@@ -13,6 +13,8 @@ ___
 + _0.7.0_:  Integrating missing features
 + _0.9.0_:  Bugfixes and performance testing
 + _1.0.0_:  Release with all the planned features below     return
+
+    return
 
 **Planned features:**
 + Upload functionality in multiple formats for the same image
