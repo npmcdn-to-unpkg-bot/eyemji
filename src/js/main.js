@@ -24,8 +24,8 @@ var vm = new Vue({
 		searchQuery: '',
 		tagsInput: '',
 		categoriesInput: '',
-		tagsSelected: ["Please select an item to display its tags!"],
-		categoriesSelected: ["Please select an item to display its categories!"],
+		tagsSelected: [],
+		categoriesSelected: [],
 		selectedImages: [],
 		visibleImages: []
 	},
@@ -60,8 +60,6 @@ var vm = new Vue({
 					var iterateTags = selectedItems[i].tags;
 					vm.tagsSelected.push(iterateTags);
 				}
-			} else if (selectedItems.length === 0) {
-				vm.tagsSelected.push("Please select an item to display its tags!");
 			} else {
 				vm.tagsSelected.push("Please select only one item at a time!");
 			}
@@ -75,8 +73,6 @@ var vm = new Vue({
 					var iterateCategories = selectedItems[i].categories;
 					vm.categoriesSelected.push(iterateCategories);
 				}
-			} else if (selectedItems.length === 0) {
-				vm.categoriesSelected.push("Please select an item to display its categories!");
 			} else {
 				vm.categoriesSelected.push("Please select only one item at a time!");
 			}
