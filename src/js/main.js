@@ -59,12 +59,12 @@ var vm = new Vue({
 			}
 			this.deselectAll();
 		},
-		
+
 		reRenderList: function() {
-			this.setVisibleImages();
 			this.deselectAll();
+			this.setVisibleImages();
 		},
-		
+
 		onVMLoad: function() {
 			this.visibleImages = this.images.map(function(a) {
 				return a.uid;

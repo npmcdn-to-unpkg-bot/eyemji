@@ -11,7 +11,7 @@ ___
 + _0.5.0_:  Download option for single or multiple images in all the available formats
 + _0.6.0_:  Authentification and admin tools for restricting usage
 + _0.7.0_:  Advanced styling with dark and light themes
-+ _0.7.0_:  Integrating missing features
++ _0.8.0_:  Integrating missing features
 + _0.9.0_:  Bugfixes and performance testing
 + _1.0.0_:  Release with all the planned features below   
    
