@@ -61,8 +61,8 @@ var vm = new Vue({
 		},
 		
 		reRenderList: function() {
-			this.deselectAll();
 			this.setVisibleImages();
+			this.deselectAll();
 		},
 		
 		onVMLoad: function() {
