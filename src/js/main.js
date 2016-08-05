@@ -24,23 +24,62 @@ var vm = new Vue({
 		searchQuery: '',
 		tagsInput: '',
 		categoriesInput: '',
-		tagsSelected: [],
-		categoriesSelected: [],
+		tagsSelected: ["Please select an item to display its tags!"],
+		categoriesSelected: ["Please select an item to display its categories!"],
 		selectedImages: [],
 		visibleImages: []
 	},
 
 	methods: {
-		addInfo: function(e) {
-			var target = event.target.id.substr(3).toLowerCase();
+		getSelectedItems: function() {
+			var selectedItems = [];
 			for (var i = 0; i < vm.selectedImages.length; i++) {
-				var found = this.images.filter(function(a) {
-					return a.uid == vm.selectedImages[i];
+				var found = this.images.filter(function(find) {
+					return find.uid == vm.selectedImages[i];
 				});
-				found[0][target].push(e);
+				selectedItems.push(found[0]);
+			}
+			return selectedItems;
+		},
+
+		addInfo: function(tar) {
+			var target = event.target.id.substr(3).toLowerCase();
+			var selectedItems = vm.getSelectedItems();
+			for (var i = 0; i < selectedItems.length; i++) {
+				selectedItems[i][target].push(tar);
 			}
 			var emptyThis = target + "Input";
 			vm[emptyThis] = '';
+		},
+
+		displayTags: function() {
+			var selectedItems = vm.getSelectedItems();
+			this.tagsSelected.splice(0, this.tagsSelected.length);
+			if (selectedItems.length === 1) {
+				for (var i = 0; i < selectedItems.length; i++) {
+					var iterateTags = selectedItems[i].tags;
+					vm.tagsSelected.push(iterateTags);
+				}
+			} else if (selectedItems.length === 0) {
+				vm.tagsSelected.push("Please select an item to display its tags!");
+			} else {
+				vm.tagsSelected.push("Please select only one item at a time!");
+			}
+		},
+
+		displayCategories: function() {
+			var selectedItems = vm.getSelectedItems();
+			this.categoriesSelected.splice(0, this.categoriesSelected.length);
+			if (selectedItems.length === 1) {
+				for (var i = 0; i < selectedItems.length; i++) {
+					var iterateCategories = selectedItems[i].categories;
+					vm.categoriesSelected.push(iterateCategories);
+				}
+			} else if (selectedItems.length === 0) {
+				vm.categoriesSelected.push("Please select an item to display its categories!");
+			} else {
+				vm.categoriesSelected.push("Please select only one item at a time!");
+			}
 		},
 
 		setVisibleImages: function() {
@@ -60,6 +99,7 @@ var vm = new Vue({
 				var index = this.selectedImages.indexOf(selected.id);
 				this.selectedImages.splice(index, 1);
 			}
+			vm.reRenderInfo();
 		},
 
 		selectAll: function() {
@@ -68,11 +108,13 @@ var vm = new Vue({
 			for (var image of this.visibleImages) {
 				this.selectedImages.push(image);
 			}
+			vm.reRenderInfo();
 		},
 
 		deselectAll: function() {
 			$(".img-container img").removeClass("img-selected");
 			this.selectedImages.splice(0, this.selectedImages.length);
+			vm.reRenderInfo();
 		},
 
 		deleteSelected: function() {
@@ -80,6 +122,11 @@ var vm = new Vue({
 				this.images.pop(image);
 			}
 			this.deselectAll();
+		},
+
+		reRenderInfo: function() {
+			vm.displayTags();
+			vm.displayCategories();
 		},
 
 		reRenderList: function() {
