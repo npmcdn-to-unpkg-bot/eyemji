@@ -5,15 +5,18 @@ var vm = new Vue({
 		images: [{
 			uid: '1',
 			url: './img/unsplash_1.jpg',
-			tags: ['rose', 'blume']
+			tags: ['rose', 'blume'],
+			categories: ['natur']
 		}, {
 			uid: '2',
 			url: './img/unsplash_2.jpg',
-			tags: ['vogelperspektive', 'landschaft']
+			tags: ['vogelperspektive', 'landschaft'],
+			categories: ['natur']
 		}, {
 			uid: '3',
 			url: './img/unsplash_3.jpg',
-			tags: ['outdoor', 'lagerfeuer']
+			tags: ['outdoor', 'lagerfeuer'],
+			categories: ['natur']
 		}],
 		searchQuery: '',
 		selectedImages: [],

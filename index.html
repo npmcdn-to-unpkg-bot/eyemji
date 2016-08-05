@@ -18,19 +18,19 @@
 <body>
 	<div id="wrapper">
 		<div id="header">
-			<button @click="selectAll">Alle selektieren</button>
-			<button @click="deselectAll">Alle deselektieren</button>
-			<button @click="deleteSelected">Löschen</button>
-			<button>Neueste zuerst</button>
-			<button>Älteste zuerst</button>
+			<button @click="selectAll">Select all</button>
+			<button @click="deselectAll">Deselect all</button>
+			<button @click="deleteSelected">Delete</button>
+			<button>Newest first</button>
+			<button>Oldest first</button>
 			<button>Lightbox</button>
 			<br>
 			<br>
-			<input placeholder="Suchbegriff" v-model="searchQuery" @keyup="reRenderList">
+			<input placeholder="Search item" v-model="searchQuery" @keyup="reRenderList">
 		</div>
 		<div id="img-area">
-			<p>Gefunden: {{ visibleImages.length }}</p>
-			<p>Ausgewählte Objekte: {{ selectedImages.length }}</p>
+			<p>{{ visibleImages.length }} items found</p>
+			<p>{{ selectedImages.length }} items selected</p>
 			<ul>
 				<li class="img-container" id="{{ image.uid }}" @click="imgSelect" v-for="image in images | filterBy searchQuery in 'uid' 'tags'">
 					<img :src="image.url" alt="">
@@ -38,7 +38,8 @@
 			</ul>
 		</div>
 		<div id="sidebar">
-			<h3> Sidebar</h3>
+			<h3>Tags</h3>
+			<h3>Categories</h3>
 		</div>
 	</div>
 
