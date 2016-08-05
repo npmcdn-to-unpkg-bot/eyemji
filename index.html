@@ -40,14 +40,14 @@
 		<div id="sidebar">
 			<h3>Tags</h3>
 			<h4>{{ tagsSelected | json }}</h4>
-			<input v-model="inputTag">
-			<button id="addTag" @click="addInfo(inputTag)">Add</button>
+			<input v-model="tagsInput">
+			<button id="addTags" @click="addInfo(tagsInput)">Add</button>
 			<br>
 			<br>
 			<h3>Categories</h3>
 			<h4>{{ categoriesSelected | json }}</h4>
-			<input v-model="inputCategorie">
-			<button id="addCategorie" @click="addInfo(inputCategorie)">Add</button>
+			<input v-model="categoriesInput">
+			<button id="addCategories" @click="addInfo(categoriesInput)">Add</button>
 		</div>
 	</div>
 

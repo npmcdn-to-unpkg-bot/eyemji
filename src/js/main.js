@@ -22,8 +22,8 @@ var vm = new Vue({
 			categories: ['natur']
 		}],
 		searchQuery: '',
-		inputTag: '',
-		inputCategorie: '',
+		tagsInput: '',
+		categoriesInput: '',
 		tagsSelected: [],
 		categoriesSelected: [],
 		selectedImages: [],
@@ -32,14 +32,14 @@ var vm = new Vue({
 
 	methods: {
 		addInfo: function(e) {
-			var target = event.target.id.substr(3);
+			var target = event.target.id.substr(3).toLowerCase();
 			for (var i = 0; i < vm.selectedImages.length; i++) {
 				var found = this.images.filter(function(a) {
 					return a.uid == vm.selectedImages[i];
 				});
-				found[0][target.toLowerCase()].push(e);
+				found[0][target].push(e);
 			}
-			var emptyThis = "input" + target;
+			var emptyThis = target + "Input";
 			vm[emptyThis] = '';
 		},
 
