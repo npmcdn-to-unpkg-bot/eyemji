@@ -12,9 +12,9 @@ ___
 + _0.7.0_:  Advanced styling with dark and light themes
 + _0.7.0_:  Integrating missing features
 + _0.9.0_:  Bugfixes and performance testing
-+ _1.0.0_:  Release with all the planned features below     return
++ _1.0.0_:  Release with all the planned features below
 
-    return
+
 
 **Planned features:**
 + Upload functionality in multiple formats for the same image
