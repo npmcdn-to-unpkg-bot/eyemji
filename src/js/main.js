@@ -160,7 +160,7 @@ var vm = new Vue({
 			var foundInfo = [];
 			vm[tar + "Visible"].splice(0, vm[tar + "Visible"].length);
 			for (var i = 0; i < visibleImages.length; i++) {
-				var iterateInfo = visibleImages[i].tags;
+				var iterateInfo = visibleImages[i][tar];
 				foundInfo.push(iterateInfo);
 			}
 			vm[tar + "Visible"] = vm.getInfo(foundInfo);
