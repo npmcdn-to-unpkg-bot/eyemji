@@ -40,7 +40,7 @@
 			<h3>Tags</h3>
 			<h4>Selected:<br>{{ tagsSelected }}&nbsp;</h4>
 			<div class="info-selector">
-				<span v-for="tag in tagsAll">
+				<span v-for="tag in tagsVisible">
 					<label id="add-{{ tag }}" @click="filterByInfo"><input type="checkbox">&nbsp;{{ tag }}</label><br>
 				</span>
 			</div>

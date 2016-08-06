@@ -24,9 +24,10 @@ var vm = new Vue({
 		searchQuery: '',
 		tagsInput: '',
 		categoriesInput: '',
+		tagsTest: [],
 		tagsAll: [],
 		categoriesAll: [],
-		tagsVisible: ['outdoor', 'lagerfeuer', 'vogelperspektive'],
+		tagsVisible: [],
 		categoriesVisible: [],
 		tagsSelected: [],
 		categoriesSelected: [],
@@ -35,31 +36,56 @@ var vm = new Vue({
 	},
 
 	methods: {
-		getSelectedItems: function() {
-			var selectedItems = [];
-			for (var i = 0; i < vm.selectedImages.length; i++) {
-				var found = this.images.filter(function(find) {
-					return find.uid == vm.selectedImages[i];
+		getItems: function(tar) {
+			var items = [];
+			for (var i = 0; i < vm[tar].length; i++) {
+				var found = vm.images.filter(function(find) {
+					return find.uid == vm[tar][i];
 				});
-				selectedItems.push(found[0]);
+				items.push(found[0]);
 			}
-			return selectedItems;
+			return items;
+		},
+
+		getInfo: function(tar) {
+			function elimDup(a) {
+				var temp = {};
+				for (var i = 0; i < a.length; i++)
+					temp[a[i]] = true;
+				return Object.keys(temp);
+			}
+
+			var tempAll = tar;
+			var dup = [];
+			for (var i = 0; i < tempAll.length; i++) {
+				for (var j = 0; j < tempAll[i].length; j++) {
+					dup.push(tempAll[i][j]);
+				}
+			}
+			var noDup = elimDup(dup);
+			return noDup;
+		},
+
+		getData: function(type, loc) {
+			return vm[loc].map(function(a) {
+				return a[type];
+			});
 		},
 
 		addInfo: function(tar) {
 			var target = event.target.id.substr(3).toLowerCase();
-			var selectedItems = vm.getSelectedItems();
+			var selectedItems = vm.getItems("selectedImages");
 			for (var i = 0; i < selectedItems.length; i++) {
 				selectedItems[i][target].push(tar);
 			}
-			var emptyThis = target + "Input";
-			vm[emptyThis] = '';
-			vm[target + 'All'] = vm.allInfo(target);
+			var emptyvm = target + "Input";
+			vm[emptyvm] = '';
+			vm[target + 'All'] = vm.getInfo(target, "images");
 		},
 
 		displayTags: function() {
-			var selectedItems = vm.getSelectedItems();
-			this.tagsSelected.splice(0, this.tagsSelected.length);
+			var selectedItems = vm.getItems("selectedImages");
+			vm.tagsSelected.splice(0, vm.tagsSelected.length);
 			if (selectedItems.length === 1) {
 				for (var i = 0; i < selectedItems.length; i++) {
 					var iterateTags = selectedItems[i].tags;
@@ -73,8 +99,8 @@ var vm = new Vue({
 		},
 
 		displayCategories: function() {
-			var selectedItems = vm.getSelectedItems();
-			this.categoriesSelected.splice(0, this.categoriesSelected.length);
+			var selectedItems = vm.getItems("selectedImages");
+			vm.categoriesSelected.splice(0, vm.categoriesSelected.length);
 			if (selectedItems.length === 1) {
 				for (var i = 0; i < selectedItems.length; i++) {
 					var iterateCategories = selectedItems[i].categories;
@@ -89,7 +115,7 @@ var vm = new Vue({
 
 		setVisibleImages: function() {
 			var visible = document.getElementsByClassName("img-container");
-			this.visibleImages.splice(0, this.visibleImages.length);
+			vm.visibleImages.splice(0, vm.visibleImages.length);
 			Array.prototype.forEach.call(visible, function(e) {
 				vm.visibleImages.push(e.id);
 			});
@@ -99,34 +125,45 @@ var vm = new Vue({
 			var selected = event.currentTarget;
 			$(selected.firstElementChild).toggleClass("img-selected");
 			if ($(selected.firstElementChild).hasClass("img-selected")) {
-				this.selectedImages.push(selected.id);
+				vm.selectedImages.push(selected.id);
 			} else {
-				var index = this.selectedImages.indexOf(selected.id);
-				this.selectedImages.splice(index, 1);
+				var index = vm.selectedImages.indexOf(selected.id);
+				vm.selectedImages.splice(index, 1);
 			}
 			vm.reRenderInfo();
 		},
 
 		selectAll: function() {
 			$(".img-container img").addClass("img-selected");
-			this.selectedImages.splice(0, this.selectedImages.length);
-			for (var image of this.visibleImages) {
-				this.selectedImages.push(image);
+			vm.selectedImages.splice(0, vm.selectedImages.length);
+			for (var image of vm.visibleImages) {
+				vm.selectedImages.push(image);
 			}
 			vm.reRenderInfo();
 		},
 
 		deselectAll: function() {
 			$(".img-container img").removeClass("img-selected");
-			this.selectedImages.splice(0, this.selectedImages.length);
+			vm.selectedImages.splice(0, vm.selectedImages.length);
 			vm.reRenderInfo();
 		},
 
 		deleteSelected: function() {
-			for (var image of this.selectedImages) {
-				this.images.pop(image);
+			for (var image of vm.selectedImages) {
+				vm.images.pop(image);
 			}
-			this.deselectAll();
+			vm.deselectAll();
+		},
+
+		setVisibleInfo: function(tar) {
+			var visibleImages = vm.getItems("visibleImages");
+			var foundInfo = [];
+			vm[tar + "Visible"].splice(0, vm[tar + "Visible"].length);
+			for (var i = 0; i < visibleImages.length; i++) {
+				var iterateInfo = visibleImages[i].tags;
+				foundInfo.push(iterateInfo);
+			}
+			vm[tar + "Visible"] = vm.getInfo(foundInfo);
 		},
 
 		filterByInfo: function() {
@@ -139,39 +176,17 @@ var vm = new Vue({
 		},
 
 		reRenderList: function() {
-			this.deselectAll();
-			this.setVisibleImages();
-		},
-
-		allInfo: function(type) {
-			function elimDup(a) {
-				var temp = {};
-				for (var i = 0; i < a.length; i++)
-					temp[a[i]] = true;
-				return Object.keys(temp);
-			}
-
-			var tempAll = this.images.map(function(a) {
-				return a[type];
-			});
-
-			var dup = [];
-			for (var i = 0; i < tempAll.length; i++) {
-				for (var j = 0; j < tempAll[i].length; j++) {
-					dup.push(tempAll[i][j]);
-				}
-			}
-			var noDup = elimDup(dup);
-			return noDup;
+			vm.deselectAll();
+			vm.setVisibleInfo("tags");
+			vm.setVisibleInfo("categories");
+			vm.setVisibleImages();
 		},
 
 		onVMLoad: function() {
-			this.visibleImages = this.images.map(function(a) {
-				return a.uid;
-			});
+			vm.visibleImages = vm.getData("uid", "images");
 
-			vm.tagsAll = vm.allInfo("tags");
-			vm.categoriesAll = vm.allInfo("categories");
+			// 			vm.tagsAll = vm.getInfo("tags", "images");
+			// 			vm.categoriesAll = vm.getInfo("categories", "images");
 		}
 	}
 })
