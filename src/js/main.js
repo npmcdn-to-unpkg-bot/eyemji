@@ -24,9 +24,6 @@ var vm = new Vue({
 		searchQuery: '',
 		tagsInput: '',
 		categoriesInput: '',
-		tagsTest: [],
-		tagsAll: [],
-		categoriesAll: [],
 		tagsVisible: [],
 		categoriesVisible: [],
 		tagsSelected: [],
@@ -72,49 +69,36 @@ var vm = new Vue({
 			});
 		},
 
-		addInfo: function(tar) {
+		addInfo: function(query) {
 			var target = event.target.id.substr(3).toLowerCase();
 			var selectedItems = vm.getItems("selectedImages");
 			for (var i = 0; i < selectedItems.length; i++) {
-				selectedItems[i][target].push(tar);
+				selectedItems[i][target].push(query);
 			}
-			var emptyvm = target + "Input";
-			vm[emptyvm] = '';
+			var emptyThis = target + "Input";
+			vm[emptyThis] = '';
 			vm[target + 'All'] = vm.getInfo(target, "images");
+			vm.setVisibleInfo(target);
 		},
 
-		displayTags: function() {
+		displayInfo: function(tar) {
 			var selectedItems = vm.getItems("selectedImages");
-			vm.tagsSelected.splice(0, vm.tagsSelected.length);
+			vm[tar + "Selected"].splice(0, vm[tar + "Selected"].length);
 			if (selectedItems.length === 1) {
 				for (var i = 0; i < selectedItems.length; i++) {
-					var iterateTags = selectedItems[i].tags;
-					vm.tagsSelected.push(iterateTags);
+					var iterateInfo = selectedItems[i][tar];
+					vm[tar + "Selected"].push(iterateInfo);
 				}
 			} else if (selectedItems.length === 0) {
-				vm.tagsSelected.push("");
+				vm[tar + "Selected"].push("");
 			} else {
-				vm.tagsSelected.push("Please select only one item at a time!");
-			}
-		},
-
-		displayCategories: function() {
-			var selectedItems = vm.getItems("selectedImages");
-			vm.categoriesSelected.splice(0, vm.categoriesSelected.length);
-			if (selectedItems.length === 1) {
-				for (var i = 0; i < selectedItems.length; i++) {
-					var iterateCategories = selectedItems[i].categories;
-					vm.categoriesSelected.push(iterateCategories);
-				}
-			} else if (selectedItems.length === 0) {
-				vm.categoriesSelected.push("");
-			} else {
-				vm.categoriesSelected.push("Please select only one item at a time!");
+				vm[tar + "Selected"].push("Please select only one item at a time!");
 			}
 		},
 
 		setVisibleImages: function() {
 			var visible = document.getElementsByClassName("img-container");
+			console.log(visible);
 			vm.visibleImages.splice(0, vm.visibleImages.length);
 			Array.prototype.forEach.call(visible, function(e) {
 				vm.visibleImages.push(e.id);
@@ -171,22 +155,20 @@ var vm = new Vue({
 		},
 
 		reRenderInfo: function() {
-			vm.displayTags();
-			vm.displayCategories();
+			vm.displayInfo("tags");
+			vm.displayInfo("categories");
 		},
 
 		reRenderList: function() {
 			vm.deselectAll();
+			vm.setVisibleImages();
 			vm.setVisibleInfo("tags");
 			vm.setVisibleInfo("categories");
-			vm.setVisibleImages();
 		},
 
 		onVMLoad: function() {
 			vm.visibleImages = vm.getData("uid", "images");
-
-			// 			vm.tagsAll = vm.getInfo("tags", "images");
-			// 			vm.categoriesAll = vm.getInfo("categories", "images");
+			vm.reRenderList();
 		}
 	}
 })
