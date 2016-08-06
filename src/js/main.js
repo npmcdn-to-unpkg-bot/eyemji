@@ -12,7 +12,7 @@ var vm = new Vue({
 			uid: '2',
 			url: './img/unsplash_2.jpg',
 			dateCreated: 'Jul 30 14:09',
-			tags: ['vogelperspektive', 'landschaft'],
+			tags: ['vogelperspektive', 'outdoor'],
 			categories: ['natur']
 		}, {
 			uid: '3',
@@ -24,6 +24,10 @@ var vm = new Vue({
 		searchQuery: '',
 		tagsInput: '',
 		categoriesInput: '',
+		tagsAll: [],
+		categoriesAll: [],
+		tagsVisible: ['outdoor', 'lagerfeuer', 'vogelperspektive'],
+		categoriesVisible: [],
 		tagsSelected: [],
 		categoriesSelected: [],
 		selectedImages: [],
@@ -50,6 +54,7 @@ var vm = new Vue({
 			}
 			var emptyThis = target + "Input";
 			vm[emptyThis] = '';
+			vm[target + 'All'] = vm.allInfo(target);
 		},
 
 		displayTags: function() {
@@ -60,6 +65,8 @@ var vm = new Vue({
 					var iterateTags = selectedItems[i].tags;
 					vm.tagsSelected.push(iterateTags);
 				}
+			} else if (selectedItems.length === 0) {
+				vm.tagsSelected.push("");
 			} else {
 				vm.tagsSelected.push("Please select only one item at a time!");
 			}
@@ -73,6 +80,8 @@ var vm = new Vue({
 					var iterateCategories = selectedItems[i].categories;
 					vm.categoriesSelected.push(iterateCategories);
 				}
+			} else if (selectedItems.length === 0) {
+				vm.categoriesSelected.push("");
 			} else {
 				vm.categoriesSelected.push("Please select only one item at a time!");
 			}
@@ -120,6 +129,10 @@ var vm = new Vue({
 			this.deselectAll();
 		},
 
+		filterByInfo: function() {
+			var selected = event.currentTarget.id.substr(4).toLowerCase();
+		},
+
 		reRenderInfo: function() {
 			vm.displayTags();
 			vm.displayCategories();
@@ -130,12 +143,41 @@ var vm = new Vue({
 			this.setVisibleImages();
 		},
 
+		allInfo: function(type) {
+			function elimDup(a) {
+				var temp = {};
+				for (var i = 0; i < a.length; i++)
+					temp[a[i]] = true;
+				return Object.keys(temp);
+			}
+
+			var tempAll = this.images.map(function(a) {
+				return a[type];
+			});
+
+			var dup = [];
+			for (var i = 0; i < tempAll.length; i++) {
+				for (var j = 0; j < tempAll[i].length; j++) {
+					dup.push(tempAll[i][j]);
+				}
+			}
+			var noDup = elimDup(dup);
+			return noDup;
+		},
+
 		onVMLoad: function() {
 			this.visibleImages = this.images.map(function(a) {
 				return a.uid;
 			});
+
+			vm.tagsAll = vm.allInfo("tags");
+			vm.categoriesAll = vm.allInfo("categories");
 		}
 	}
 })
+
+// Vue.filter('currentInfo', function (value) {
+//   return value.reverse();
+// })
 
 vm.onVMLoad();

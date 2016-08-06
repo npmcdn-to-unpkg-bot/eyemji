@@ -28,7 +28,7 @@ p {
   right: 0;
   width: 25vw;
   height: 100%;
-  padding-left: 1rem;
+  padding: 1rem;
   background-color: firebrick;
 }
 
@@ -54,6 +54,18 @@ p {
 
 .img-selected {
   border-color: dodgerblue !important;
+}
+
+.info-selector {
+  background-color: whitesmoke;
+  margin: 1rem 0;
+  padding: 1rem;
+  width: 100%;
+  min-height: 5rem;
+}
+
+input.search-input {
+  width: 8rem;
 }
 
 .item-move {

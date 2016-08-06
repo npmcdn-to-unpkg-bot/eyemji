@@ -25,28 +25,37 @@
 			<button>Oldest first</button>
 			<button>Lightbox</button>
 			<br>
-			<br>
 			<input placeholder="Search item" v-model="searchQuery" @keyup="reRenderList">
 		</div>
 		<div id="img-area">
 			<p>{{ visibleImages.length }} items found</p>
 			<p>{{ selectedImages.length }} items selected</p>
 			<ul>
-				<li class="img-container" id="{{ image.uid }}" @click="imgSelect" v-for="image in images | filterBy searchQuery in 'uid' 'tags'">
+				<li class="img-container" id="{{ image.uid }}" @click="imgSelect" v-for="image in images | filterBy searchQuery in 'tags' 'categories'">
 					<img :src="image.url" alt="">
 				</li>
 			</ul>
 		</div>
 		<div id="sidebar">
 			<h3>Tags</h3>
-			<h4>Selected:<br>{{ tagsSelected }}</h4>
-			<input v-model="tagsInput">
+			<h4>Selected:<br>{{ tagsSelected }}&nbsp;</h4>
+			<div class="info-selector">
+				<span v-for="tag in tagsAll">
+					<label id="add-{{ tag }}" @click="filterByInfo"><input type="checkbox">&nbsp;{{ tag }}</label><br>
+				</span>
+			</div>
+			<input class="search-input" v-model="tagsInput">
 			<button id="addTags" @click="addInfo(tagsInput)">Add</button>
 			<br>
 			<br>
 			<h3>Categories</h3>
-			<h4>Selected:<br>{{ categoriesSelected }}</h4>
-			<input v-model="categoriesInput">
+			<h4>Selected:<br>{{ categoriesSelected }}&nbsp;</h4>
+			<div class="info-selector">
+				<span v-for="category in categoriesAll">
+					<label id="add-{{ category }}" @click=""><input type="checkbox">&nbsp;{{ category }}</label><br>
+				</span>
+			</div>
+			<input class="search-input" v-model="categoriesInput">
 			<button id="addCategories" @click="addInfo(categoriesInput)">Add</button>
 		</div>
 	</div>
