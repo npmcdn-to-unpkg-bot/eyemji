@@ -10,8 +10,8 @@ p {
   position: fixed;
   z-index: 98;
   width: 75vw;
-  height: 5rem;
-  background-color: firebrick;
+  height: 4.75rem;
+  background-color: rgb(209, 17, 65);
 }
 
 #img-area {
@@ -29,7 +29,7 @@ p {
   width: 25vw;
   height: 100%;
   padding: 1rem;
-  background-color: firebrick;
+  background-color: rgb(209, 17, 65);
 }
 
 #img-area ul {
@@ -40,16 +40,33 @@ p {
   margin: 0;
 }
 
-.img-container img {
+.img-container {
+  position: relative;
   width: 200px;
   height: 200px;
+  margin: .5rem;
+  cursor: pointer;
   border: 2px solid transparent;
 }
 
-.img-container {
-  position: relative;
-  margin: .5rem;
-  cursor: pointer;
+.img-container img {
+  width: 100%;
+  height: 100%;
+}
+
+.img-container span {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: .5rem;
+  background-color: rgba(209, 17, 65, .9);
+}
+
+.img-container span p {
+  color: black;
 }
 
 .img-selected {
@@ -64,8 +81,16 @@ p {
   min-height: 5rem;
 }
 
-input.search-input {
+input[type=checkbox] {
+  outline: none;
+}
+
+input.inputInfo {
   width: 8rem;
+}
+
+.info-selector span {
+  line-height: 1.5;
 }
 
 .item-move {

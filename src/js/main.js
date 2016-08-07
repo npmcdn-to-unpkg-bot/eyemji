@@ -32,6 +32,12 @@ var vm = new Vue({
 		visibleImages: []
 	},
 
+	computed: {
+		filteredImages: function() {
+			return JSON.parse(JSON.stringify(this.images));
+		}
+	},
+
 	methods: {
 		getItems: function(tar) {
 			var items = [];
@@ -70,35 +76,18 @@ var vm = new Vue({
 		},
 
 		addInfo: function(query) {
-			var target = event.target.id.substr(3).toLowerCase();
+			var target = event.target.id.substr(3);
 			var selectedItems = vm.getItems("selectedImages");
 			for (var i = 0; i < selectedItems.length; i++) {
-				selectedItems[i][target].push(query);
+				selectedItems[i][target.toLowerCase()].push(query);
 			}
-			var emptyThis = target + "Input";
-			vm[emptyThis] = '';
-			vm[target + 'All'] = vm.getInfo(target, "images");
-			vm.setVisibleInfo(target);
-		},
-
-		displayInfo: function(tar) {
-			var selectedItems = vm.getItems("selectedImages");
-			vm[tar + "Selected"].splice(0, vm[tar + "Selected"].length);
-			if (selectedItems.length === 1) {
-				for (var i = 0; i < selectedItems.length; i++) {
-					var iterateInfo = selectedItems[i][tar];
-					vm[tar + "Selected"].push(iterateInfo);
-				}
-			} else if (selectedItems.length === 0) {
-				vm[tar + "Selected"].push("");
-			} else {
-				vm[tar + "Selected"].push("Please select only one item at a time!");
-			}
+			$("input#add" + target).next("button").attr("disabled", "true");
+			vm[target.toLowerCase() + "Input"] = '';
+			vm.reRenderList();
 		},
 
 		setVisibleImages: function() {
 			var visible = document.getElementsByClassName("img-container");
-			console.log(visible);
 			vm.visibleImages.splice(0, vm.visibleImages.length);
 			Array.prototype.forEach.call(visible, function(e) {
 				vm.visibleImages.push(e.id);
@@ -107,35 +96,34 @@ var vm = new Vue({
 
 		imgSelect: function() {
 			var selected = event.currentTarget;
-			$(selected.firstElementChild).toggleClass("img-selected");
-			if ($(selected.firstElementChild).hasClass("img-selected")) {
+			$(selected).toggleClass("img-selected");
+			if ($(selected).hasClass("img-selected")) {
 				vm.selectedImages.push(selected.id);
 			} else {
 				var index = vm.selectedImages.indexOf(selected.id);
 				vm.selectedImages.splice(index, 1);
 			}
-			vm.reRenderInfo();
 		},
 
 		selectAll: function() {
-			$(".img-container img").addClass("img-selected");
+			$(".img-container").addClass("img-selected");
 			vm.selectedImages.splice(0, vm.selectedImages.length);
 			for (var image of vm.visibleImages) {
 				vm.selectedImages.push(image);
 			}
-			vm.reRenderInfo();
 		},
 
 		deselectAll: function() {
-			$(".img-container img").removeClass("img-selected");
+			$(".img-container").removeClass("img-selected");
 			vm.selectedImages.splice(0, vm.selectedImages.length);
-			vm.reRenderInfo();
 		},
 
 		deleteSelected: function() {
-			for (var image of vm.selectedImages) {
-				vm.images.pop(image);
+			var selectedItems = vm.getItems("selectedImages");
+			for (var i = 0; i < selectedItems.length; i++) {
+				vm.images.splice(i, 1);
 			}
+			vm.reRenderList();
 			vm.deselectAll();
 		},
 
@@ -151,16 +139,11 @@ var vm = new Vue({
 		},
 
 		filterByInfo: function() {
-			var selected = event.currentTarget.id.substr(4).toLowerCase();
-		},
-
-		reRenderInfo: function() {
-			vm.displayInfo("tags");
-			vm.displayInfo("categories");
+			var selected = event.currentTarget.id.substr(5).toLowerCase();
+			//console.log(selected);
 		},
 
 		reRenderList: function() {
-			vm.deselectAll();
 			vm.setVisibleImages();
 			vm.setVisibleInfo("tags");
 			vm.setVisibleInfo("categories");
@@ -172,9 +155,5 @@ var vm = new Vue({
 		}
 	}
 })
-
-// Vue.filter('currentInfo', function (value) {
-//   return value.reverse();
-// })
 
 vm.onVMLoad();

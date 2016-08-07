@@ -25,6 +25,7 @@
 			<button>Oldest first</button>
 			<button>Lightbox</button>
 			<br>
+			<br>
 			<input placeholder="Search item" v-model="searchQuery" @keyup="reRenderList">
 		</div>
 		<div id="img-area">
@@ -33,33 +34,60 @@
 			<ul>
 				<li class="img-container" id="{{ image.uid }}" @click="imgSelect" v-for="image in images | filterBy searchQuery in 'tags' 'categories'">
 					<img :src="image.url" alt="">
+					<span>
+						<p>Tags:<br>{{ image.tags | json }}</p>
+						<p>Categories:<br>{{ image.categories | json }}</p>
+					</span>
 				</li>
 			</ul>
 		</div>
 		<div id="sidebar">
 			<h3>Tags</h3>
-			<h4>Selected:<br>{{ tagsSelected }}&nbsp;</h4>
+			<!-- 			<h4>Selected:<br>{{ tagsSelected }}&nbsp;</h4> -->
 			<div class="info-selector">
 				<span v-for="tag in tagsVisible">
-					<label id="add-{{ tag }}" @click="filterByInfo"><input type="checkbox">&nbsp;{{ tag }}</label><br>
+					<label id="info-{{ tag }}" @click="filterByInfo"><input type="checkbox">&nbsp;{{ tag }}</label><br>
 				</span>
 			</div>
-			<input class="search-input" v-model="tagsInput">
-			<button id="addTags" @click="addInfo(tagsInput)">Add</button>
+			<input class="inputInfo" id="addTags" v-model="tagsInput">
+			<button class="addInfo" id="addTags" disabled="true" @click="addInfo(tagsInput)">Add</button>
 			<br>
 			<br>
 			<h3>Categories</h3>
-			<h4>Selected:<br>{{ categoriesSelected }}&nbsp;</h4>
+			<!-- 			<h4>Selected:<br>{{ categoriesSelected }}&nbsp;</h4> -->
 			<div class="info-selector">
 				<span v-for="category in categoriesVisible">
-					<label id="add-{{ category }}" @click=""><input type="checkbox">&nbsp;{{ category }}</label><br>
+					<label id="info-{{ category }}" @click="filterByInfo"><input type="checkbox">&nbsp;{{ category }}</label><br>
 				</span>
 			</div>
-			<input class="search-input" v-model="categoriesInput">
-			<button id="addCategories" @click="addInfo(categoriesInput)">Add</button>
+			<input class="inputInfo" id="addCategories" v-model="categoriesInput">
+			<button class="addInfo" id="addCategories" disabled="true" @click="addInfo(categoriesInput)">Add</button>
 		</div>
 	</div>
 
+	<script>
+		$(function() {
+			$(".img-container").hover(function() {
+				$(this).children("span").show();
+			}, function() {
+				$(this).children("span").hide();
+			});
+
+			$(".inputInfo").keyup(function() {
+				if (!$(this).val()) {
+					$(this).next("button").attr("disabled", "true");
+				} else {
+					$(this).next("button").removeAttr("disabled");
+				}
+			});
+
+			$(".inputInfo").keypress(function(e) {
+				if (e.which == 13) {
+					$(this).next("button").click();
+				}
+			});
+		})
+	</script>
 	<script src="./src/js/main.js"></script>
 </body>
 

@@ -19,7 +19,7 @@ ___
 **Planned features:**
 + Upload functionality in multiple formats for the same image
 + Tagging, Categories and GPS coordinates
-+ Sorting after these parameters
++ Sorting by these parameters
 + Downloading images in the different formats
 + Giving list of possibly missing items of the chosen format during the download
 + Admin tools which allow to make rules e.g. "No Uploading without any Tagging"
