@@ -171,6 +171,15 @@ var vm = new Vue({
 			vm.setVisibleImages();
 			vm.setVisibleInfo("tags");
 			vm.setVisibleInfo("categories");
+			vm.reApplyHover();
+		},
+
+		reApplyHover: function() {
+			$(".img-container").hover(function() {
+				$(this).children("span").show();
+			}, function() {
+				$(this).children("span").hide();
+			});
 		},
 
 		onVMLoad: function() {

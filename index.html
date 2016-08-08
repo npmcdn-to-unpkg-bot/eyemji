@@ -73,12 +73,6 @@
 
 	<script>
 		$(function() {
-			$(".img-container").hover(function() {
-				$(this).children("span").show();
-			}, function() {
-				$(this).children("span").hide();
-			});
-
 			$(".inputInfo").keyup(function() {
 				if (!$(this).val()) {
 					$(this).next("button").attr("disabled", "true");
