@@ -5,7 +5,7 @@ var vm = new Vue({
 		images: [{
 			uid: '1',
 			url: './img/unsplash_1.jpg',
-			dateUploaded: '1470691813739',
+			dateUploaded: Date.now(),
 			tags: ['rose', 'blume'],
 			categories: ['natur']
 		}, {
@@ -17,12 +17,12 @@ var vm = new Vue({
 		}, {
 			uid: '3',
 			url: './img/unsplash_3.jpg',
-			dateUploaded: Date.now(),
+			dateUploaded: '1470691813739',
 			tags: ['outdoor', 'lagerfeuer'],
 			categories: ['technik']
 		}],
 		searchQuery: '',
-		order: 1,
+		order: -1,
 		infoQuery: [],
 		tagsInput: '',
 		categoriesInput: '',
