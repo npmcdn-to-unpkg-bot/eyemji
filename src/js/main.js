@@ -19,11 +19,14 @@ var vm = new Vue({
 			url: './img/unsplash_3.jpg',
 			dateCreated: 'Aug  4 21:38',
 			tags: ['outdoor', 'lagerfeuer'],
-			categories: ['natur']
+			categories: ['technik']
 		}],
 		searchQuery: '',
+		infoQuery: '',
 		tagsInput: '',
 		categoriesInput: '',
+		filterTags: '',
+		filterCategories: '',
 		tagsVisible: [],
 		categoriesVisible: [],
 		tagsSelected: [],
@@ -121,10 +124,12 @@ var vm = new Vue({
 		deleteSelected: function() {
 			var selectedItems = vm.getItems("selectedImages");
 			for (var i = 0; i < selectedItems.length; i++) {
-				vm.images.splice(i, 1);
+				console.log(selectedItems[i]);
+				var target = 1;
+				vm.images.splice(target, 1);
 			}
-			vm.reRenderList();
 			vm.deselectAll();
+			vm.reRenderList();
 		},
 
 		setVisibleInfo: function(tar) {
@@ -132,15 +137,34 @@ var vm = new Vue({
 			var foundInfo = [];
 			vm[tar + "Visible"].splice(0, vm[tar + "Visible"].length);
 			for (var i = 0; i < visibleImages.length; i++) {
-				var iterateInfo = visibleImages[i][tar];
-				foundInfo.push(iterateInfo);
+				foundInfo.push(visibleImages[i][tar]);
 			}
 			vm[tar + "Visible"] = vm.getInfo(foundInfo);
 		},
 
 		filterByInfo: function() {
-			var selected = event.currentTarget.id.substr(5).toLowerCase();
-			//console.log(selected);
+			var target = event.currentTarget;
+			var selected = target.id.substr(5).toLowerCase();
+			if (target.firstElementChild.checked) {
+				vm.infoQuery = selected;
+				setTimeout(function() {
+					vm.reRenderList();
+				}, 100);
+			} else {
+				vm.infoQuery = '';
+				setTimeout(function() {
+					vm.reRenderList();
+				}, 100);
+			}
+		},
+
+		removeInfoFilter: function() {
+			var target = event.target.className.substr(7).toLowerCase();
+			var amount = $(".filter-" + target).children("input");
+			for (var i = 0; i < amount.length; i++) {
+				$(amount[i]).prop("checked", true).click();
+			}
+			vm.reRenderList();
 		},
 
 		reRenderList: function() {

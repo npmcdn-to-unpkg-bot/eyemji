@@ -11,6 +11,7 @@
 	<link rel="stylesheet" href="./src/css/main.css">
 	<!-- 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css"> -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/lodash/4.14.1/lodash.js"></script>
 	<script src="https://npmcdn.com/vue/dist/vue.js"></script>
 	<!-- 	<script src="./src/js/vue-animated-list.js"></script> -->
 </head>
@@ -27,12 +28,13 @@
 			<br>
 			<br>
 			<input placeholder="Search item" v-model="searchQuery" @keyup="reRenderList">
+			<button @click="searchQuery = ''">X</button><br>
 		</div>
 		<div id="img-area">
 			<p>{{ visibleImages.length }} items found</p>
 			<p>{{ selectedImages.length }} items selected</p>
 			<ul>
-				<li class="img-container" id="{{ image.uid }}" @click="imgSelect" v-for="image in images | filterBy searchQuery in 'tags' 'categories'">
+				<li class="img-container" id="{{ image.uid }}" @click="imgSelect" v-for="image in images | filterBy infoQuery | filterBy searchQuery in 'tags' 'categories'">
 					<img :src="image.url" alt="">
 					<span>
 						<p>Tags:<br>{{ image.tags | json }}</p>
@@ -43,10 +45,12 @@
 		</div>
 		<div id="sidebar">
 			<h3>Tags</h3>
-			<!-- 			<h4>Selected:<br>{{ tagsSelected }}&nbsp;</h4> -->
+			<input class="inputInfo" placeholder="Filter tags" v-model="filterTags" @keyup="reRenderList">
+			<button disabled="true" @click="filterTags = ''">X</button><br>
+			<button class="filter-tags" @click="removeInfoFilter">Remove filters</button>
 			<div class="info-selector">
-				<span v-for="tag in tagsVisible">
-					<label id="info-{{ tag }}" @click="filterByInfo"><input type="checkbox">&nbsp;{{ tag }}</label><br>
+				<span v-for="tag in tagsVisible | filterBy filterTags">
+					<label class="filter-tags" id="info-{{ tag }}" @click="filterByInfo"><input type="checkbox">&nbsp;{{ tag }}</label><br>
 				</span>
 			</div>
 			<input class="inputInfo" id="addTags" v-model="tagsInput">
@@ -54,10 +58,12 @@
 			<br>
 			<br>
 			<h3>Categories</h3>
-			<!-- 			<h4>Selected:<br>{{ categoriesSelected }}&nbsp;</h4> -->
+			<input class="inputInfo" placeholder="Filter categories" v-model="filterCategories" @keyup="reRenderList">
+			<button disabled="true" @click="filterCategories = ''">X</button><br>
+			<button class="filter-categories" @click="removeInfoFilter">Remove filters</button>
 			<div class="info-selector">
-				<span v-for="category in categoriesVisible">
-					<label id="info-{{ category }}" @click="filterByInfo"><input type="checkbox">&nbsp;{{ category }}</label><br>
+				<span v-for="category in categoriesVisible | filterBy filterCategories">
+					<label class="filter-categories" id="info-{{ category }}" @click="filterByInfo"><input type="checkbox">&nbsp;{{ category }}</label><br>
 				</span>
 			</div>
 			<input class="inputInfo" id="addCategories" v-model="categoriesInput">
