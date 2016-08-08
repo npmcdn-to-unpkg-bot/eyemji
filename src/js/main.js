@@ -5,23 +5,24 @@ var vm = new Vue({
 		images: [{
 			uid: '1',
 			url: './img/unsplash_1.jpg',
-			dateCreated: 'Aug  2 17:26',
+			dateUploaded: '1470691813739',
 			tags: ['rose', 'blume'],
 			categories: ['natur']
 		}, {
 			uid: '2',
 			url: './img/unsplash_2.jpg',
-			dateCreated: 'Jul 30 14:09',
+			dateUploaded: '1470691849999',
 			tags: ['vogelperspektive', 'outdoor'],
 			categories: ['natur']
 		}, {
 			uid: '3',
 			url: './img/unsplash_3.jpg',
-			dateCreated: 'Aug  4 21:38',
+			dateUploaded: Date.now(),
 			tags: ['outdoor', 'lagerfeuer'],
 			categories: ['technik']
 		}],
 		searchQuery: '',
+		order: 1,
 		infoQuery: [],
 		tagsInput: '',
 		categoriesInput: '',

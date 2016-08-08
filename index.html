@@ -22,8 +22,8 @@
 			<button @click="selectAll">Select all</button>
 			<button @click="deselectAll">Deselect all</button>
 			<button @click="deleteSelected">Delete</button>
-			<button>Newest first</button>
-			<button>Oldest first</button>
+			<button @click="order = -1">Newest first</button>
+			<button @click="order = 1">Oldest first</button>
 			<button>Lightbox</button>
 			<br>
 			<br>
@@ -34,7 +34,7 @@
 			<p>{{ visibleImages.length }} items found</p>
 			<p>{{ selectedImages.length }} items selected</p>
 			<ul>
-				<li class="img-container" id="{{ image.uid }}" @click="imgSelect" v-for="image in images | filterBy infoQuery | filterBy searchQuery in 'tags' 'categories'">
+				<li class="img-container" id="{{ image.uid }}" @click="imgSelect" v-for="image in images | orderBy 'dateUploaded' order | filterBy infoQuery | filterBy searchQuery in 'tags' 'categories'">
 					<img :src="image.url" alt="">
 					<span>
 						<p>Tags:<br>{{ image.tags | json }}</p>
