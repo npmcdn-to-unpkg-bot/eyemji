@@ -22,7 +22,7 @@ var vm = new Vue({
 			categories: ['technik']
 		}],
 		searchQuery: '',
-		infoQuery: '',
+		infoQuery: [],
 		tagsInput: '',
 		categoriesInput: '',
 		filterTags: '',
@@ -36,9 +36,9 @@ var vm = new Vue({
 	},
 
 	computed: {
-		filteredImages: function() {
-			return JSON.parse(JSON.stringify(this.images));
-		}
+		// 		filteredImages: function() {
+		// 			return JSON.parse(JSON.stringify(this.images));
+		// 		}
 	},
 
 	methods: {
@@ -122,14 +122,19 @@ var vm = new Vue({
 		},
 
 		deleteSelected: function() {
-			var selectedItems = vm.getItems("selectedImages");
-			for (var i = 0; i < selectedItems.length; i++) {
-				console.log(selectedItems[i]);
-				var target = 1;
-				vm.images.splice(target, 1);
+			if (confirm("Do you really want to delete the selected items?")) {
+				var selectedItems = vm.getItems("selectedImages");
+				for (var i = 0; i < selectedItems.length; i++) {
+					var pos = vm.getData("uid", "images").indexOf(selectedItems[i].uid);
+					vm.images.splice(pos, 1);
+				}
+			} else {
+
 			}
 			vm.deselectAll();
-			vm.reRenderList();
+			setTimeout(function() {
+				vm.reRenderList();
+			}, 1);
 		},
 
 		setVisibleInfo: function(tar) {
@@ -143,24 +148,21 @@ var vm = new Vue({
 		},
 
 		filterByInfo: function() {
-			var target = event.currentTarget;
-			var selected = target.id.substr(5).toLowerCase();
-			if (target.firstElementChild.checked) {
-				vm.infoQuery = selected;
-				setTimeout(function() {
-					vm.reRenderList();
-				}, 100);
+			var target = event.target;
+			var selected = target.id.substr(4).toLowerCase();
+			if (target.checked) {
+				vm.infoQuery.push(selected);
 			} else {
-				vm.infoQuery = '';
-				setTimeout(function() {
-					vm.reRenderList();
-				}, 100);
+				vm.infoQuery.splice(vm.infoQuery.indexOf(selected), 1);
 			}
+			setTimeout(function() {
+				vm.reRenderList();
+			}, 1);
 		},
 
 		removeInfoFilter: function() {
 			var target = event.target.className.substr(7).toLowerCase();
-			var amount = $(".filter-" + target).children("input");
+			var amount = $(".filter-" + target);
 			for (var i = 0; i < amount.length; i++) {
 				$(amount[i]).prop("checked", true).click();
 			}

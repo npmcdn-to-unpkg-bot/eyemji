@@ -50,7 +50,9 @@
 			<button class="filter-tags" @click="removeInfoFilter">Remove filters</button>
 			<div class="info-selector">
 				<span v-for="tag in tagsVisible | filterBy filterTags">
-					<label class="filter-tags" id="info-{{ tag }}" @click="filterByInfo"><input type="checkbox">&nbsp;{{ tag }}</label><br>
+					<input class="filter-tags" id="for-{{ tag }}" type="checkbox" @click="filterByInfo">
+					<label id="info-{{ tag }}" for="for-{{ tag }}">&nbsp;{{ tag }}</label>
+					<br>
 				</span>
 			</div>
 			<input class="inputInfo" id="addTags" v-model="tagsInput">
@@ -63,7 +65,9 @@
 			<button class="filter-categories" @click="removeInfoFilter">Remove filters</button>
 			<div class="info-selector">
 				<span v-for="category in categoriesVisible | filterBy filterCategories">
-					<label class="filter-categories" id="info-{{ category }}" @click="filterByInfo"><input type="checkbox">&nbsp;{{ category }}</label><br>
+					<input class="filter-categories" id="for-{{ category }}" type="checkbox" @click="filterByInfo">
+					<label id="info-{{ category }}" for="for-{{ category }}">&nbsp;{{ category }}</label>
+					<br>
 				</span>
 			</div>
 			<input class="inputInfo" id="addCategories" v-model="categoriesInput">
