@@ -21,9 +21,9 @@ var vm = new Vue({
 			tags: ['outdoor', 'lagerfeuer'],
 			categories: ['technik']
 		}],
-		searchQuery: '',
 		order: -1,
 		infoQuery: [],
+		searchQuery: '',
 		tagsInput: '',
 		categoriesInput: '',
 		filterTags: '',
@@ -130,7 +130,7 @@ var vm = new Vue({
 					vm.images.splice(pos, 1);
 				}
 			} else {
-
+				// nothing
 			}
 			vm.deselectAll();
 			setTimeout(function() {
