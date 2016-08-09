@@ -214,7 +214,7 @@ var vm = new Vue({
 			vm.deselectAll();
 			setTimeout(function() {
 				vm.reRenderList();
-			}, 1);
+			}, 21);
 		},
 
 		setVisibleInfo: function(tar) {
@@ -237,7 +237,8 @@ var vm = new Vue({
 			}
 			setTimeout(function() {
 				vm.reRenderList();
-			}, 1);
+			}, 21);
+			vm.deselectAll();
 		},
 
 		removeInfoFilter: function() {

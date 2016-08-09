@@ -19,20 +19,21 @@
 <body>
 	<div id="wrapper">
 		<div id="header">
-			<button @click="selectAll">Select all</button>
-			<button @click="deselectAll">Deselect all</button>
-			<button @click="deleteSelected">Delete</button>
-			<button @click="order = 1">Oldest first</button>
-			<button @click="order = -1">Newest first</button>
-			<button>Lightbox</button>
-			<br>
-			<br>
-			<input placeholder="Search item" v-model="searchQuery" @keyup="reRenderList">
-			<button @click="searchQuery = ''">X</button><br>
+			<div id="header-wrapper">
+				<button @click="selectAll">Select all</button>
+				<button @click="deselectAll">Deselect all</button>
+				<button @click="deleteSelected">Delete</button>
+				<button @click="order = 1">Oldest first</button>
+				<button @click="order = -1">Newest first</button>
+				<br>
+				<br>
+				<input placeholder="Search item" v-model="searchQuery" @keyup="reRenderList">
+				<button class="inline" @click="searchQuery = ''">X</button>
+				<p class="inline">{{ visibleImages.length }} items found</p>
+				<p class="inline">{{ selectedImages.length }} items selected</p>
+			</div>
 		</div>
 		<div id="img-area">
-			<p>{{ visibleImages.length }} items found</p>
-			<p>{{ selectedImages.length }} items selected</p>
 			<ul>
 				<li class="img-container" id="{{ image.uid }}" @click="imgSelect" v-for="image in images | orderBy 'dateUploaded' order | filterBy infoQuery | filterBy searchQuery in 'tags' 'categories'">
 					<img :src="image.url" alt="">
@@ -46,7 +47,7 @@
 		<div id="sidebar">
 			<h3>Tags</h3>
 			<input class="inputInfo" placeholder="Filter tags" v-model="filterTags" @keyup="reRenderList">
-			<button disabled="true" @click="filterTags = ''">X</button><br>
+			<button disabled="true" @click="filterTags = ''">X</button><br><br>
 			<button class="filter-tags" @click="removeInfoFilter">Remove filters</button>
 			<div class="info-selector">
 				<span v-for="tag in tagsVisible | filterBy filterTags">
@@ -59,9 +60,10 @@
 			<button class="addInfo" id="addTags" disabled="true" @click="addInfo(tagsInput)">Add</button>
 			<br>
 			<br>
+			<br>
 			<h3>Categories</h3>
 			<input class="inputInfo" placeholder="Filter categories" v-model="filterCategories" @keyup="reRenderList">
-			<button disabled="true" @click="filterCategories = ''">X</button><br>
+			<button disabled="true" @click="filterCategories = ''">X</button><br><br>
 			<button class="filter-categories" @click="removeInfoFilter">Remove filters</button>
 			<div class="info-selector">
 				<span v-for="category in categoriesVisible | filterBy filterCategories">
@@ -77,6 +79,10 @@
 
 	<script>
 		$(function() {
+			$(".inputInfo").next("button").click(function() {
+				$(this).attr("disabled", "true");
+			});
+			
 			$(".inputInfo").keyup(function() {
 				if (!$(this).val()) {
 					$(this).next("button").attr("disabled", "true");
