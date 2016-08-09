@@ -20,6 +20,42 @@ var vm = new Vue({
 			dateUploaded: '1470691813739',
 			tags: ['outdoor', 'lagerfeuer'],
 			categories: ['technik']
+		}, {
+			uid: '4',
+			url: './img/unsplash_3.jpg',
+			dateUploaded: '1470691813739',
+			tags: ['outdoor', 'lagerfeuer'],
+			categories: ['technik']
+		}, {
+			uid: '5',
+			url: './img/unsplash_3.jpg',
+			dateUploaded: '1470691813739',
+			tags: ['outdoor', 'lagerfeuer'],
+			categories: ['technik']
+		}, {
+			uid: '6',
+			url: './img/unsplash_3.jpg',
+			dateUploaded: '1470691813739',
+			tags: ['outdoor', 'lagerfeuer'],
+			categories: ['technik']
+		}, {
+			uid: '7',
+			url: './img/unsplash_3.jpg',
+			dateUploaded: '1470691813739',
+			tags: ['outdoor', 'lagerfeuer'],
+			categories: ['technik']
+		}, {
+			uid: '8',
+			url: './img/unsplash_3.jpg',
+			dateUploaded: '1470691813739',
+			tags: ['outdoor', 'lagerfeuer'],
+			categories: ['technik']
+		}, {
+			uid: '9',
+			url: './img/unsplash_3.jpg',
+			dateUploaded: '1470691813739',
+			tags: ['outdoor', 'lagerfeuer'],
+			categories: ['technik']
 		}],
 		order: -1,
 		infoQuery: [],
@@ -37,9 +73,10 @@ var vm = new Vue({
 	},
 
 	computed: {
-		// 		filteredImages: function() {
-		// 			return JSON.parse(JSON.stringify(this.images));
-		// 		}
+		filteredImages: function() {
+			var filteredImages = JSON.parse(JSON.stringify(this.images));
+			return filteredImages;
+		}
 	},
 
 	methods: {
@@ -98,11 +135,40 @@ var vm = new Vue({
 			});
 		},
 
-		imgSelect: function() {
+		imgSelect: function(e) {
 			var selected = event.currentTarget;
 			$(selected).toggleClass("img-selected");
 			if ($(selected).hasClass("img-selected")) {
-				vm.selectedImages.push(selected.id);
+				if (e.shiftKey && document.getElementsByClassName("img-selected").length >= 2) {
+					var prev = selected;
+					while (true) {
+						prev = $(prev).prev("li");
+						if ($(prev).hasClass("img-selected")) {
+							vm.clearSelection();
+							vm.selectedImages.push(selected.id);
+							break;
+						} else {
+							$(prev).addClass("img-selected");
+							vm.selectedImages.push(prev[0].id);
+						}
+					}
+					// 					var next = $(".img-container.img-selected").first();
+					// 					while (true) {
+					// 						next = $(next).next("li");
+					// 						if ($(next).is(selected)) {
+					// 							vm.selectedImages.push(selected.id);
+					// 							vm.clearSelection();
+					// 							break;
+					// 						} else {
+					// 							if (vm.selectedImages.indexOf(next[0].id) == -1) {
+					// 								$(next).addClass("img-selected");
+					// 								vm.selectedImages.push(next[0].id);
+					// 							}
+					// 						}
+					// 					}
+				} else {
+					vm.selectedImages.push(selected.id);
+				}
 			} else {
 				var index = vm.selectedImages.indexOf(selected.id);
 				vm.selectedImages.splice(index, 1);
@@ -129,8 +195,6 @@ var vm = new Vue({
 					var pos = vm.getData("uid", "images").indexOf(selectedItems[i].uid);
 					vm.images.splice(pos, 1);
 				}
-			} else {
-				// nothing
 			}
 			vm.deselectAll();
 			setTimeout(function() {
@@ -183,6 +247,14 @@ var vm = new Vue({
 			}, function() {
 				$(this).children("span").hide();
 			});
+		},
+
+		clearSelection: function() {
+			if (document.selection) {
+				document.selection.empty();
+			} else if (window.getSelection) {
+				window.getSelection().removeAllRanges();
+			}
 		},
 
 		onVMLoad: function() {
