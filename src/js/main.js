@@ -140,16 +140,16 @@ var vm = new Vue({
 			$(selected).toggleClass("img-selected");
 			if ($(selected).hasClass("img-selected")) {
 				if (e.shiftKey && document.getElementsByClassName("img-selected").length >= 2) {
-					var prev = selected;
+					var prevAdd = selected;
 					while (true) {
-						prev = $(prev).prev("li");
-						if ($(prev).hasClass("img-selected")) {
+						prevAdd = $(prevAdd).prev("li");
+						if ($(prevAdd).hasClass("img-selected")) {
 							vm.clearSelection();
 							vm.selectedImages.push(selected.id);
 							break;
 						} else {
-							$(prev).addClass("img-selected");
-							vm.selectedImages.push(prev[0].id);
+							$(prevAdd).addClass("img-selected");
+							vm.selectedImages.push(prevAdd[0].id);
 						}
 					}
 					// 					var next = $(".img-container.img-selected").first();
@@ -170,8 +170,23 @@ var vm = new Vue({
 					vm.selectedImages.push(selected.id);
 				}
 			} else {
-				var index = vm.selectedImages.indexOf(selected.id);
-				vm.selectedImages.splice(index, 1);
+				if (e.shiftKey && document.getElementsByClassName("img-selected").length >= 2) {
+					var prevDel = selected;
+					while (true) {
+						prevDel = $(prevDel).prev("li");
+						if (!$(prevDel).hasClass("img-selected")) {
+							vm.clearSelection();
+							vm.selectedImages.splice(vm.selectedImages.indexOf(selected.id), 1);
+							break;
+						} else {
+							$(prevDel).removeClass("img-selected");
+							vm.selectedImages.splice(vm.selectedImages.indexOf(prevDel.id), 1);
+						}
+					}
+				} else {
+					var index = vm.selectedImages.indexOf(selected.id);
+					vm.selectedImages.splice(index, 1);
+				}
 			}
 		},
 
