@@ -9,11 +9,11 @@
 	<title>eyemji</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css">
 	<link rel="stylesheet" href="./src/css/main.css">
-	<!-- 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css"> -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/lodash/4.14.1/lodash.js"></script>
+	<script src="https://cdn.jsdelivr.net/lodash/4.15.0/lodash.js"></script>
 	<script src="https://npmcdn.com/vue/dist/vue.js"></script>
-	<!-- 	<script src="./src/js/vue-animated-list.js"></script> -->
+	<script src="./src/js/vue-animated-list.js"></script>
 </head>
 
 <body>
@@ -29,13 +29,22 @@
 				<br>
 				<input placeholder="Search item" v-model="searchQuery" @keyup="reRenderList">
 				<button class="inline" @click="searchQuery = ''">X</button>
-				<p class="inline">{{ visibleImages.length }} items found</p>
+				<p class="inline">{{ filteredImages.length }} items found</p>
 				<p class="inline">{{ selectedImages.length }} items selected</p>
 			</div>
 		</div>
 		<div id="img-area">
+<!-- 			<ul>
+				<li class="img-container" id="{{ image.uid }}" @click="imgSelect" v-for="image in images | orderBy 'dateUploaded' order | filterBy infoQuery in 'tags' 'categories' | filterBy searchQuery in 'tags' 'categories'">
+					<img :src="image.url" alt="">
+					<span>
+						<p>Tags:<br>{{ image.tags | json }}</p>
+						<p>Categories:<br>{{ image.categories | json }}</p>
+					</span>
+				</li>
+			</ul> -->
 			<ul>
-				<li class="img-container" id="{{ image.uid }}" @click="imgSelect" v-for="image in images | orderBy 'dateUploaded' order | filterBy infoQuery | filterBy searchQuery in 'tags' 'categories'">
+				<li class="img-container" id="{{ image.uid }}" @click="imgSelect" transition="item" v-for="image in filteredImages | orderBy 'dateUploaded' order" track-by="uid">
 					<img :src="image.url" alt="">
 					<span>
 						<p>Tags:<br>{{ image.tags | json }}</p>
@@ -51,7 +60,7 @@
 			<button class="filter-tags" @click="removeInfoFilter">Remove filters</button>
 			<div class="info-selector">
 				<span v-for="tag in tagsVisible | filterBy filterTags">
-					<input class="filter-tags" id="for-{{ tag }}" type="checkbox" @click="filterByInfo">
+					<input class="filter-tags" id="for-{{ tag }}" type="checkbox" @click="filterByInfo('tags')">
 					<label id="info-{{ tag }}" for="for-{{ tag }}">&nbsp;{{ tag }}</label>
 					<br>
 				</span>
@@ -67,7 +76,7 @@
 			<button class="filter-categories" @click="removeInfoFilter">Remove filters</button>
 			<div class="info-selector">
 				<span v-for="category in categoriesVisible | filterBy filterCategories">
-					<input class="filter-categories" id="for-{{ category }}" type="checkbox" @click="filterByInfo">
+					<input class="filter-categories" id="for-{{ category }}" type="checkbox" @click="filterByInfo('categories')">
 					<label id="info-{{ category }}" for="for-{{ category }}">&nbsp;{{ category }}</label>
 					<br>
 				</span>
