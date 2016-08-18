@@ -91,14 +91,16 @@ var vm = new Vue({
 				for (var i = 0; i < this.images.length; i++) {
 					for (var tQ = 0; tQ < this.tagsQuery.length; tQ++) {
 						if (this.images[i].tags.indexOf(this.tagsQuery[tQ]) == -1) {
-							//filteredImages.push(this.images[i]);
+							this.images[i].visible = false;
+						}
+					}
+					for (var cQ = 0; cQ < this.categoriesQuery.length; cQ++) {
+						if (this.images[i].categories.indexOf(this.categoriesQuery[cQ]) == -1) {
 							this.images[i].visible = false;
 						}
 					}
 				}
 			}
-			//console.log(_.filter(this.images, ['visible', true]));
-			//console.log(filteredImages);
 			filteredImages = _.filter(this.images, ['visible', true]);
 			return filteredImages;
 		}
@@ -133,14 +135,14 @@ var vm = new Vue({
 				return a[type];
 			});
 		},
-		
+
 		elimDup: function(a) {
 			var temp = {};
 			for (var i = 0; i < a.length; i++)
 				temp[a[i]] = true;
 			return Object.keys(temp);
 		},
-		
+
 		addInfo: function(query) {
 			var target = event.target.id.substr(3);
 			var selectedItems = vm.getItems("selectedImages");
@@ -151,14 +153,6 @@ var vm = new Vue({
 			vm[target.toLowerCase() + "Input"] = '';
 			vm.reRenderList();
 		},
-
-// 		setVisibleImages: function() {
-// 			var visible = document.getElementsByClassName("img-container");
-// 			vm.visibleImages.splice(0, vm.visibleImages.length);
-// 			Array.prototype.forEach.call(visible, function(e) {
-// 				vm.visibleImages.push(e.id);
-// 			});
-// 		},
 
 		imgSelect: function(e) {
 			var selected = event.currentTarget;
@@ -214,7 +208,7 @@ var vm = new Vue({
 				}
 			}
 		},
-		
+
 		selectAll: function() {
 			$(".img-container").addClass("img-selected");
 			vm.selectedImages.splice(0, vm.selectedImages.length);
@@ -253,9 +247,6 @@ var vm = new Vue({
 		},
 
 		filterByInfo: function(tar) {
-			$.each(vm.images, function() {
-				this.visible = true;
-			});
 			var target = event.target;
 			var selected = target.id.substr(4).toLowerCase();
 			if (target.checked) {
@@ -282,10 +273,16 @@ var vm = new Vue({
 		},
 
 		reRenderList: function() {
-			vm.setVisibleImages();
 			vm.setVisibleInfo("tags");
 			vm.setVisibleInfo("categories");
+			vm.resetVisible();
 			vm.reApplyHover();
+		},
+
+		resetVisible: function() {
+			$.each(vm.images, function() {
+				this.visible = true;
+			});
 		},
 
 		reApplyHover: function() {

@@ -34,17 +34,8 @@
 			</div>
 		</div>
 		<div id="img-area">
-<!-- 			<ul>
-				<li class="img-container" id="{{ image.uid }}" @click="imgSelect" v-for="image in images | orderBy 'dateUploaded' order | filterBy infoQuery in 'tags' 'categories' | filterBy searchQuery in 'tags' 'categories'">
-					<img :src="image.url" alt="">
-					<span>
-						<p>Tags:<br>{{ image.tags | json }}</p>
-						<p>Categories:<br>{{ image.categories | json }}</p>
-					</span>
-				</li>
-			</ul> -->
 			<ul>
-				<li class="img-container" id="{{ image.uid }}" @click="imgSelect" transition="item" v-for="image in filteredImages | orderBy 'dateUploaded' order" track-by="uid">
+				<li class="img-container" id="{{ image.uid }}" @click="imgSelect" transition="item" v-for="image in filteredImages | orderBy 'dateUploaded' order | filterBy searchQuery in 'tags' 'categories'" track-by="uid">
 					<img :src="image.url" alt="">
 					<span>
 						<p>Tags:<br>{{ image.tags | json }}</p>
@@ -91,7 +82,7 @@
 			$(".inputInfo").next("button").click(function() {
 				$(this).attr("disabled", "true");
 			});
-			
+
 			$(".inputInfo").keyup(function() {
 				if (!$(this).val()) {
 					$(this).next("button").attr("disabled", "true");
