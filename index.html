@@ -13,7 +13,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/lodash/4.15.0/lodash.js"></script>
 	<script src="https://npmcdn.com/vue/dist/vue.js"></script>
-	<script src="./src/js/vue-animated-list.js"></script>
+<!-- 	<script src="./src/js/vue-animated-list.js"></script> -->
 </head>
 
 <body>
@@ -35,7 +35,7 @@
 		</div>
 		<div id="img-area">
 			<ul>
-				<li class="img-container" id="{{ image.uid }}" @click="imgSelect" transition="item" v-for="image in filteredImages | orderBy 'dateUploaded' order | filterBy searchQuery in 'tags' 'categories'" track-by="uid">
+				<li class="img-container" id="{{ image.uid }}" @click="imgSelect" transition="item" v-for="image in filteredImages | orderBy 'dateUploaded' order" track-by="uid">
 					<img :src="image.url" alt="">
 					<span>
 						<p>Tags:<br>{{ image.tags | json }}</p>
