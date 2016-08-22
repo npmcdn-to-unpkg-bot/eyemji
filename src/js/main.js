@@ -82,6 +82,12 @@ var vm = new Vue({
 	},
 
 	computed: {
+		/*
+			Generates the collection of items based on tags, categories and search query.
+			It iterates over all the items and changes their "visible" boolean based on the selected values.
+			If all values are empty it will just clone the items data and display that.
+			At the end, all the items that have the "visible" boolean turned to 'true' are being added to and array to output it.
+		*/
 		filteredImages: function() {
 			var filteredImages = [];
 			for (var i = 0; i < this.images.length; i++) {
@@ -105,6 +111,9 @@ var vm = new Vue({
 	},
 
 	methods: {
+		/*
+			Used to get the objects via the "uid" of the items given to the method.
+		*/
 		getItems: function(tar) {
 			var items = [];
 			for (var i = 0; i < vm[tar].length; i++) {
@@ -116,6 +125,19 @@ var vm = new Vue({
 			return items;
 		},
 
+		/*
+			Searches through a given array after a certain key;
+			it then returns all the found values for that key.
+		*/
+		getData: function(type, loc) {
+			return vm[loc].map(function(a) {
+				return a[type];
+			});
+		},
+
+		/*
+			Flattens a nested array of values.
+		*/
 		getInfo: function(tar) {
 			var tempAll = tar;
 			var dup = [];
@@ -128,12 +150,9 @@ var vm = new Vue({
 			return noDup;
 		},
 
-		getData: function(type, loc) {
-			return vm[loc].map(function(a) {
-				return a[type];
-			});
-		},
-
+		/*
+			Eliminates duplicates from an array.
+		*/
 		elimDup: function(a) {
 			var temp = {};
 			for (var i = 0; i < a.length; i++)
@@ -141,6 +160,9 @@ var vm = new Vue({
 			return Object.keys(temp);
 		},
 
+		/*
+			Fires when adding a new tag/category to a selection of items.
+		*/
 		addInfo: function(query) {
 			var target = event.target.id.substr(3);
 			var selectedItems = vm.getItems("selectedImages");
@@ -152,6 +174,12 @@ var vm = new Vue({
 			vm.reRenderList();
 		},
 
+		/*
+			Gives the clicked items a visual selection box as well as adding them to an array of selected items.
+			It also checks if the shift-key was pressed while selecting, if that evalutes to true it iterates over the items backwards to the last item that's already selected;
+			it then selects everything in between.
+			Left an alternative way of selection commented out for future use.
+		*/
 		imgSelect: function(e) {
 			var selected = event.currentTarget;
 			$(selected).toggleClass("img-selected");
@@ -207,6 +235,9 @@ var vm = new Vue({
 			}
 		},
 
+		/*
+			Adds all the currently displayed items to the array of selected ones after deselecting all.
+		*/
 		selectAll: function() {
 			$(".img-container").addClass("img-selected");
 			vm.selectedImages.splice(0, vm.selectedImages.length);
@@ -215,11 +246,17 @@ var vm = new Vue({
 			}
 		},
 
+		/*
+			Deletes the whole array with selected items.
+		*/
 		deselectAll: function() {
 			$(".img-container").removeClass("img-selected");
 			vm.selectedImages.splice(0, vm.selectedImages.length);
 		},
 
+		/*
+			Iterates over the selected items if the 'delete'-button gets pressed and removes them entirely from the data after a confirmation prompt.
+		*/
 		deleteSelected: function() {
 			if (confirm("Do you really want to delete the selected items?")) {
 				var selectedItems = vm.getItems("selectedImages");
@@ -235,6 +272,9 @@ var vm = new Vue({
 			}, 21);
 		},
 
+		/*
+			Mainly used in the 'reRenderList'-method to determine which tags/categories should be displayed in the sidebar based on the currently displayed items.
+		*/
 		setVisibleInfo: function(tar) {
 			var foundInfo = [];
 			vm[tar + "Visible"].splice(0, vm[tar + "Visible"].length);
@@ -244,6 +284,10 @@ var vm = new Vue({
 			vm[tar + "Visible"] = vm.getInfo(foundInfo);
 		},
 
+		/*
+			Adds tag/category to the array of selected ones after clicking on one in the sidebar.
+			The array is then used to compute the 'filteredImages'-property.
+		*/
 		filterByInfo: function(tar) {
 			vm.reRenderList();
 			var target = event.target;
@@ -259,6 +303,9 @@ var vm = new Vue({
 			vm.deselectAll();
 		},
 
+		/*
+			Upon clicking onto the 'Remove Filters'-button this method removes either all tags or categories from the currently selected ones.
+		*/
 		removeInfoFilter: function() {
 			var target = event.target.className.substr(7).toLowerCase();
 			var amount = $(".filter-" + target);
@@ -271,6 +318,10 @@ var vm = new Vue({
 			}, 21);
 		},
 
+		/*
+			This method is used to re-render the sidebar. It finds out which tags/categories are currently still possible to select based on the currently displayed items.
+			It also reapplies the hover method and resets the 'visible' boolean of all the items.
+		*/
 		reRenderList: function() {
 			vm.setVisibleInfo("tags");
 			vm.setVisibleInfo("categories");
@@ -278,12 +329,20 @@ var vm = new Vue({
 			vm.reApplyHover();
 		},
 
+		/*
+			This resets all the items to be currently 'visible'.
+			This is just used for the computed property to re-compute everything properly on every data change.
+		*/
 		resetVisible: function() {
 			$.each(vm.images, function() {
 				this.visible = true;
 			});
 		},
 
+		/*
+			Formerly on every change of the DOM, the changed items lost their JQuery event to display an info box on hover.
+			This re-applies this JQuery event on every re-rendering of the DOM to counter this behavior.
+		*/
 		reApplyHover: function() {
 			$(".img-container").hover(function() {
 				$(this).children("span").show();
@@ -292,6 +351,10 @@ var vm = new Vue({
 			});
 		},
 
+		/*
+			This is so far just used for the shift-key bulk selection.
+			It prevents the normal behavior of the browser to highlight all the text in blue, which looked very odd.
+		*/
 		clearSelection: function() {
 			if (document.selection) {
 				document.selection.empty();
@@ -300,6 +363,9 @@ var vm = new Vue({
 			}
 		},
 
+		/*
+			This is just used to fire certain methods right upon loading this JS-file.
+		*/
 		onVMLoad: function() {
 			vm.reRenderList();
 		}
