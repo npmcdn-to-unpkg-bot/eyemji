@@ -8,63 +8,63 @@ var vm = new Vue({
 			dateUploaded: Date.now(),
 			tags: ['rose', 'blume'],
 			categories: ['natur'],
-			visible: true
+			visible: false
 		}, {
 			uid: '2',
 			url: './img/unsplash_2.jpg',
 			dateUploaded: '1470691849999',
 			tags: ['vogelperspektive', 'outdoor'],
 			categories: ['natur'],
-			visible: true
+			visible: false
 		}, {
 			uid: '3',
 			url: './img/unsplash_3.jpg',
 			dateUploaded: '1470691813739',
 			tags: ['outdoor', 'lagerfeuer'],
 			categories: ['technik'],
-			visible: true
+			visible: false
 		}, {
 			uid: '4',
 			url: './img/unsplash_3.jpg',
 			dateUploaded: '1470691813739',
 			tags: ['outdoor', 'lagerfeuer'],
 			categories: ['technik'],
-			visible: true
+			visible: false
 		}, {
 			uid: '5',
 			url: './img/unsplash_3.jpg',
 			dateUploaded: '1470691813739',
 			tags: ['outdoor', 'lagerfeuer'],
 			categories: ['technik'],
-			visible: true
+			visible: false
 		}, {
 			uid: '6',
 			url: './img/unsplash_3.jpg',
 			dateUploaded: '1470691813739',
 			tags: ['outdoor', 'lagerfeuer'],
 			categories: ['technik'],
-			visible: true
+			visible: false
 		}, {
 			uid: '7',
 			url: './img/unsplash_3.jpg',
 			dateUploaded: '1470691813739',
 			tags: ['outdoor', 'lagerfeuer'],
 			categories: ['technik'],
-			visible: true
+			visible: false
 		}, {
 			uid: '8',
 			url: './img/unsplash_3.jpg',
 			dateUploaded: '1470691813739',
 			tags: ['outdoor', 'lagerfeuer'],
 			categories: ['technik'],
-			visible: true
+			visible: false
 		}, {
 			uid: '9',
 			url: './img/unsplash_3.jpg',
 			dateUploaded: '1470691813739',
 			tags: ['outdoor', 'lagerfeuer'],
 			categories: ['technik'],
-			visible: true
+			visible: false
 		}],
 		order: -1,
 		searchQuery: '',
@@ -90,22 +90,37 @@ var vm = new Vue({
 		*/
 		filteredImages: function() {
 			var filteredImages = [];
-			for (var i = 0; i < this.images.length; i++) {
-				for (var tQ = 0; tQ < this.tagsQuery.length; tQ++) {
-					if (this.images[i].tags.indexOf(this.tagsQuery[tQ]) == -1) {
-						this.images[i].visible = false;
+			if (this.searchQuery.length === 0 && this.tagsQuery.length === 0 && this.categoriesQuery.length === 0) {
+				filteredImages = JSON.parse(JSON.stringify(this.images));
+			} else {
+				for (var i = 0; i < this.images.length; i++) {
+					for (var tQ = 0; tQ < this.tagsQuery.length; tQ++) {
+						if (this.images[i].tags.indexOf(this.tagsQuery[tQ]) != -1) {
+							this.images[i].visible = true;
+						}
+					}
+					for (var cQ = 0; cQ < this.categoriesQuery.length; cQ++) {
+						if (this.images[i].categories.indexOf(this.categoriesQuery[cQ]) != -1) {
+							this.images[i].visible = true;
+						}
+					}
+					if (this.searchQuery.length >= 1) {
+						for (var tL = 0; tL < this.images[i].tags.length; tL++) {
+							if (this.images[i].tags[tL].indexOf(this.searchQuery) != -1) {
+								this.images[i].visible = true;
+							}
+						}
+						// 					for (var cL = 0; tL < this.images[i].categories.length; cL++) {
+						// 						if (this.images[i].categories[cL].indexOf(this.searchQuery) == -1) {
+						// 							this.images[i].visible = false;
+						// 						} else {
+						// 							break;
+						// 						}
+						// 					}
 					}
 				}
-				for (var cQ = 0; cQ < this.categoriesQuery.length; cQ++) {
-					if (this.images[i].categories.indexOf(this.categoriesQuery[cQ]) == -1) {
-						this.images[i].visible = false;
-					}
-				}
-				if (this.searchQuery.length > 0 && this.images[i].tags.indexOf(this.searchQuery) == -1) {
-					this.images[i].visible = false;
-				}
+				filteredImages = _.filter(this.images, ['visible', true]);
 			}
-			filteredImages = _.filter(this.images, ['visible', !false]);
 			return filteredImages;
 		}
 	},
@@ -163,7 +178,7 @@ var vm = new Vue({
 		/*
 			Fires when adding a new tag/category to a selection of items.
 		*/
-		addInfo: function(query) {
+		addInfo: function(event, query) {
 			var target = event.target.id.substr(3);
 			var selectedItems = vm.getItems("selectedImages");
 			for (var i = 0; i < selectedItems.length; i++) {
@@ -180,11 +195,11 @@ var vm = new Vue({
 			it then selects everything in between.
 			Left an alternative way of selection commented out for future use.
 		*/
-		imgSelect: function(e) {
+		imgSelect: function(event) {
 			var selected = event.currentTarget;
 			$(selected).toggleClass("img-selected");
 			if ($(selected).hasClass("img-selected")) {
-				if (e.shiftKey && document.getElementsByClassName("img-selected").length >= 2) {
+				if (event.shiftKey && document.getElementsByClassName("img-selected").length >= 2) {
 					var prevAdd = selected;
 					while (true) {
 						prevAdd = $(prevAdd).prev("li");
@@ -215,7 +230,7 @@ var vm = new Vue({
 					vm.selectedImages.push(selected.id);
 				}
 			} else {
-				if (e.shiftKey && document.getElementsByClassName("img-selected").length >= 2) {
+				if (event.shiftKey && document.getElementsByClassName("img-selected").length >= 2) {
 					var prevDel = selected;
 					while (true) {
 						prevDel = $(prevDel).prev("li");
@@ -229,8 +244,7 @@ var vm = new Vue({
 						}
 					}
 				} else {
-					var index = vm.selectedImages.indexOf(selected.id);
-					vm.selectedImages.splice(index, 1);
+					vm.selectedImages.splice(vm.selectedImages.indexOf(selected.id), 1);
 				}
 			}
 		},
@@ -261,7 +275,6 @@ var vm = new Vue({
 			if (confirm("Do you really want to delete the selected items?")) {
 				var selectedItems = vm.getItems("selectedImages");
 				for (var i = 0; i < selectedItems.length; i++) {
-					console.log(selectedItems[i].uid);
 					var pos = vm.getData("uid", "images").indexOf(selectedItems[i].uid);
 					vm.images.splice(pos, 1);
 				}
@@ -288,7 +301,7 @@ var vm = new Vue({
 			Adds tag/category to the array of selected ones after clicking on one in the sidebar.
 			The array is then used to compute the 'filteredImages'-property.
 		*/
-		filterByInfo: function(tar) {
+		filterByInfo: function(event, tar) {
 			vm.reRenderList();
 			var target = event.target;
 			var selected = target.id.substr(4).toLowerCase();
@@ -306,7 +319,7 @@ var vm = new Vue({
 		/*
 			Upon clicking onto the 'Remove Filters'-button this method removes either all tags or categories from the currently selected ones.
 		*/
-		removeInfoFilter: function() {
+		removeInfoFilter: function(event) {
 			var target = event.target.className.substr(7).toLowerCase();
 			var amount = $(".filter-" + target);
 			for (var i = 0; i < amount.length; i++) {
@@ -335,7 +348,7 @@ var vm = new Vue({
 		*/
 		resetVisible: function() {
 			$.each(vm.images, function() {
-				this.visible = true;
+				this.visible = false;
 			});
 		},
 
