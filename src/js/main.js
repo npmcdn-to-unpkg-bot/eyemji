@@ -7,64 +7,55 @@ var vm = new Vue({
 			url: './img/unsplash_1.jpg',
 			dateUploaded: Date.now(),
 			tags: ['rose', 'blume'],
-			categories: ['natur'],
-			visible: false
+			categories: ['natur']
 		}, {
 			uid: '2',
 			url: './img/unsplash_2.jpg',
 			dateUploaded: '1470691849999',
 			tags: ['vogelperspektive', 'outdoor'],
-			categories: ['natur'],
-			visible: false
+			categories: ['natur']
 		}, {
 			uid: '3',
 			url: './img/unsplash_3.jpg',
 			dateUploaded: '1470691813739',
 			tags: ['outdoor', 'lagerfeuer'],
-			categories: ['technik'],
-			visible: false
+			categories: ['technik']
 		}, {
 			uid: '4',
 			url: './img/unsplash_3.jpg',
 			dateUploaded: '1470691813739',
 			tags: ['outdoor', 'lagerfeuer'],
-			categories: ['technik'],
-			visible: false
+			categories: ['technik']
 		}, {
 			uid: '5',
 			url: './img/unsplash_3.jpg',
 			dateUploaded: '1470691813739',
 			tags: ['outdoor', 'lagerfeuer'],
-			categories: ['technik'],
-			visible: false
+			categories: ['technik']
 		}, {
 			uid: '6',
 			url: './img/unsplash_3.jpg',
 			dateUploaded: '1470691813739',
 			tags: ['outdoor', 'lagerfeuer'],
-			categories: ['technik'],
-			visible: false
+			categories: ['technik']
 		}, {
 			uid: '7',
 			url: './img/unsplash_3.jpg',
 			dateUploaded: '1470691813739',
 			tags: ['outdoor', 'lagerfeuer'],
-			categories: ['technik'],
-			visible: false
+			categories: ['technik']
 		}, {
 			uid: '8',
 			url: './img/unsplash_3.jpg',
 			dateUploaded: '1470691813739',
 			tags: ['outdoor', 'lagerfeuer'],
-			categories: ['technik'],
-			visible: false
+			categories: ['technik']
 		}, {
 			uid: '9',
 			url: './img/unsplash_3.jpg',
 			dateUploaded: '1470691813739',
 			tags: ['outdoor', 'lagerfeuer'],
-			categories: ['technik'],
-			visible: false
+			categories: ['technik']
 		}],
 		order: -1,
 		searchQuery: '',
@@ -90,37 +81,40 @@ var vm = new Vue({
 		*/
 		filteredImages: function() {
 			var filteredImages = [];
-			if (this.searchQuery.length === 0 && this.tagsQuery.length === 0 && this.categoriesQuery.length === 0) {
-				filteredImages = JSON.parse(JSON.stringify(this.images));
-			} else {
-				for (var i = 0; i < this.images.length; i++) {
+			for (var i = 0; i < this.images.length; i++) {
+				if (this.searchQuery.length === 0 && this.tagsQuery.length === 0 && this.categoriesQuery.length === 0) {
+					this.images[i].visible = true;
+				} else {
 					for (var tQ = 0; tQ < this.tagsQuery.length; tQ++) {
-						if (this.images[i].tags.indexOf(this.tagsQuery[tQ]) != -1) {
-							this.images[i].visible = true;
+						if (this.images[i].tags.indexOf(this.tagsQuery[tQ]) == -1) {
+							this.images[i].filterHit = false;
 						}
 					}
 					for (var cQ = 0; cQ < this.categoriesQuery.length; cQ++) {
-						if (this.images[i].categories.indexOf(this.categoriesQuery[cQ]) != -1) {
-							this.images[i].visible = true;
+						if (this.images[i].categories.indexOf(this.categoriesQuery[cQ]) == -1) {
+							this.images[i].filterHit = false;
 						}
 					}
 					if (this.searchQuery.length >= 1) {
 						for (var tL = 0; tL < this.images[i].tags.length; tL++) {
 							if (this.images[i].tags[tL].indexOf(this.searchQuery) != -1) {
-								this.images[i].visible = true;
+								this.images[i].searchHit = true;
 							}
 						}
-						// 					for (var cL = 0; tL < this.images[i].categories.length; cL++) {
-						// 						if (this.images[i].categories[cL].indexOf(this.searchQuery) == -1) {
-						// 							this.images[i].visible = false;
-						// 						} else {
-						// 							break;
-						// 						}
-						// 					}
+						for (var cL = 0; cL < this.images[i].categories.length; cL++) {
+							if (this.images[i].categories[cL].indexOf(this.searchQuery) != -1) {
+								this.images[i].searchHit = true;
+							}
+						}
+					} else {
+						this.images[i].searchHit = true;
+					}
+					if (this.images[i].filterHit !== false && this.images[i].searchHit === true) {
+						this.images[i].visible = true;
 					}
 				}
-				filteredImages = _.filter(this.images, ['visible', true]);
 			}
+			filteredImages = _.filter(this.images, ['visible', true]);
 			return filteredImages;
 		}
 	},
@@ -255,8 +249,8 @@ var vm = new Vue({
 		selectAll: function() {
 			$(".img-container").addClass("img-selected");
 			vm.selectedImages.splice(0, vm.selectedImages.length);
-			for (var image of vm.filteredImages) {
-				vm.selectedImages.push(image);
+			for (var item of vm.filteredImages) {
+				vm.selectedImages.push(item.uid);
 			}
 		},
 
@@ -349,6 +343,8 @@ var vm = new Vue({
 		resetVisible: function() {
 			$.each(vm.images, function() {
 				this.visible = false;
+				this.filterHit = true;
+				this.searchHit = false;
 			});
 		},
 
@@ -386,3 +382,7 @@ var vm = new Vue({
 })
 
 vm.onVMLoad();
+
+window.setInterval(function() {
+	vm.reRenderList();
+}, 123);

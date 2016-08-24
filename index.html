@@ -28,7 +28,7 @@
 				<button @click="order = -1">Newest first</button>
 				<br>
 				<br>
-				<input placeholder="Search item" v-model="searchQuery" @keyup="reRenderList | debounce 100">
+				<input placeholder="Search item" v-model="searchQuery" @keyup="reRenderList">
 				<button class="inline" @click="searchQuery = ''">X</button>
 				<p class="inline">{{ filteredImages.length }} items found</p>
 				<p class="inline">{{ selectedImages.length }} items selected</p>
