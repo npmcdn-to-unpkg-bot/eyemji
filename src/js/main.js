@@ -184,6 +184,25 @@ var vm = new Vue({
 		},
 
 		/*
+			Fires when trying to delete an existing tag/category from a selection of items.
+		*/
+		deleteInfo: function(target, info) {
+			var selectedItems = vm.getItems("selectedImages");
+			var showAlert = false;
+			for (var i = 0; i < selectedItems.length; i++) {
+				if (selectedItems[i][target].indexOf(info) == -1) {
+					showAlert = true;
+				} else {
+					selectedItems[i][target].splice(selectedItems[i][target].indexOf(info), 1);
+				}
+			}
+			if (showAlert) {
+				window.alert("The action could not be performed on all the selected items!");
+			}
+			vm.reRenderList();
+		},
+
+		/*
 			Gives the clicked items a visual selection box as well as adding them to an array of selected items.
 			It also checks if the shift-key was pressed while selecting, if that evalutes to true it iterates over the items backwards to the last item that's already selected;
 			it then selects everything in between.

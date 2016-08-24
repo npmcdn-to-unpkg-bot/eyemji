@@ -54,6 +54,7 @@
 				<span v-for="tag in tagsVisible | filterBy filterTags">
 					<input class="filter-tags" id="for-{{ tag }}" type="checkbox" @click="filterByInfo($event, 'tags')">
 					<label id="info-{{ tag }}" for="for-{{ tag }}">&nbsp;{{ tag }}</label>
+					<button class="addInfo" id="del-for-{{ tag }}" @click="deleteInfo('tags', tag)">X</button>
 					<br>
 				</span>
 			</div>
@@ -70,6 +71,7 @@
 				<span v-for="category in categoriesVisible | filterBy filterCategories">
 					<input class="filter-categories" id="for-{{ category }}" type="checkbox" @click="filterByInfo($event, 'categories')">
 					<label id="info-{{ category }}" for="for-{{ category }}">&nbsp;{{ category }}</label>
+					<button class="addInfo" id="del-for-{{ category }}" @click="deleteInfo('categories', category)">X</button>
 					<br>
 				</span>
 			</div>
