@@ -4,8 +4,8 @@ ___
    
    
 **Roadmap:**
-+ _0.1.0_:  Basic styling as well as tagging, categorizing and sorting functionality  <- **CURRENT**
-+ _0.2.0_:  Display images with lazy and infinite loading as well as a lightbox feature
++ _0.1.0_:  Basic styling as well as tagging, categorizing and sorting functionality
++ _0.2.0_:  Display images with lazy and infinite loading as well as a lightbox feature <- **CURRENTLY DEVELOPING**
 + _0.3.0_:  Basic upload functionality with Dropzone.JS and inserting into the Database
 + _0.4.0_:  Option to upload the same image in multiple formats as well as tagging and categories while uploading
 + _0.5.0_:  Download option for single or multiple images in all the available formats
